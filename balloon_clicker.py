@@ -84,16 +84,27 @@ balloonsInList = 0
 balloonSpawn = 1
 
 font1 = pygame.font.SysFont('freesanbold.ttf', 50)
-font2 = pygame.font.SysFont('freesanbold.ttf', 50)
+font2 = pygame.font.SysFont('freesanbold.ttf', 100)
+buttonFont = pygame.font.SysFont('freesanbold.ttf', 30)
 mouse1 = False
 
 xchange = 10
 ychange = 10
 
 circleCounter = 0;
+autoPopCounter = 0;
 
 points = 0
 pointsValue = 1
+
+clockSpeed = 1
+autoPop = 0
+
+pointsCost = 10
+speedUpCost = 10*clockSpeed
+speedDownCost = speedUpCost/5
+balloonSpawnCost = 50
+autoPopCost = 100
 
 circleGroup = list()
 play = True
@@ -102,13 +113,14 @@ zeroZero = (0,0)
 
 #TEXT
 text1 = font1.render(f"Points: {points}", True, (20, 10, 150))
+morePoints = buttonFont.render(f"More Points per Balloon: {pointsCost}", True, (0, 0, 0))
 loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 
 pointsBox = text1.get_rect()
 
 pointsBox.center = (700, 50)
 
-clockSpeed = 1
+
 #GAME LOOP
 #circleGroup.append(Circle())
 while play:
@@ -130,6 +142,7 @@ while play:
 					for x in range(newint, len(circleGroup)):
 						circleGroup[x].index -= 1
 					del circleGroup[newint]
+					break
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
 		elif event.type == QUIT:
@@ -190,5 +203,9 @@ while play:
 		pygame.display.flip()
 		time.sleep(5)
 		quit()
+	while autoPopCounter < autoPop:
+		circleGroup.pop()
+		points += pointsValue
 	#Test End
+	autoPopCounter = 0;
 	pygame.display.flip()
