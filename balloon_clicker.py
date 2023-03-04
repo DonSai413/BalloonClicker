@@ -33,12 +33,12 @@ screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 
 class Circle(pygame.sprite.Sprite):
-	index = 0
-	radius = 20
 	def __new__(cls, *args, **kwargs):
 		print("1. Create a new instance of Circle.")
 		return super().__new__(cls)
 	def __init__(self):
+		self.index = 0
+		self.radius = 20
 		self.balloonX = random.randrange(1, 799)
 		self.balloonY = random.randrange(1, 599)
 		self.red = random.randrange(100, 150)
