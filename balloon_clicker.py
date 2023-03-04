@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import random
+import sys
 
 # Define our square object and call super to
 # give it all the properties and methods of pygame.sprite.Sprite
@@ -19,12 +20,14 @@ class Square(pygame.sprite.Sprite):
         self.surf.fill((0, 200, 255))
         self.rect = self.surf.get_rect()
 #Test End
+
 image = pygame.image.load("sky_image.jpg")
 
 #GAME INITIALIZATION
 pygame.init()
 pygame.display.set_caption("Balloon Clicker")
 screen = pygame.display.set_mode((800, 600))
+clock = pygame.time.Clock()
 
 #SPRITE INITIALIZATION
 #Test Start
@@ -38,8 +41,8 @@ square4 = Square()
 #Test End
 
 #VARIABLES
-x = 0
-y = 0
+balloonX = 0
+balloonY = 0
 
 xchange = 10
 ychange = 10
@@ -48,21 +51,37 @@ play = True
 
 zeroZero = (0,0)
 
+clockSpeed = 1
 #GAME LOOP
 while play:
+	radius = 10
+	balloonX = random.randrange(1, 799)
+	balloonY = random.randrange(1, 599)
+	red = random.randrange(100, 150)
+	green = random.randrange(100, 150)
+	blue = random.randrange(100, 150)
+	color = (red, green, blue)
+	thickness = 0;
+	center_point = (balloonX, balloonY)
+	clock.tick(clockSpeed)
+	#ticks = pygame.time.get_ticks()
 	#screen.blit(square5.surf, (0, 0))
+	#EVENT CAPTURING
 	for event in pygame.event.get():
 		if event.type == KEYDOWN:
 			if event.key == K_BACKSPACE:
 				play = False
 		elif event.type == QUIT:
 			play = False
+		#elif event.type == MOUSEDOWN:
+			#play = False
 	#Test Start
 	screen.fill((0, 0, 0))
 	screen.blit(image, dest = zeroZero)
-	screen.blit(square1.surf,(x,y))
-	x = random.randrange(1, 800)
-	y = random.randrange(1, 600)
+	#screen.blit(square1.surf,(balloonX,balloonY))
+	#if ticks > 10000:
+	#x = random.randrange(1, 800)
+	#y = random.randrange(1, 600)
 	"""if x >= 600 or x <= 0:
 		xchange = xchange*-1*random.randrange(1, 5)
 	if y >= 800 or x <= 0:
@@ -70,5 +89,6 @@ while play:
 	screen.blit(square2.surf,(40,530))
 	screen.blit(square3.surf,(730,40))
 	screen.blit(square4.surf,(730,530))
+	pygame.draw.circle(screen, color, center_point, radius, thickness)
 	#Test End
 	pygame.display.flip()
