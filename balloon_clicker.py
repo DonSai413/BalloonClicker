@@ -3,6 +3,7 @@ from pygame.locals import *
 import random
 import sys
 from collections import defaultdict
+import time
 
 # Define our square object and call super to
 # give it all the properties and methods of pygame.sprite.Sprite
@@ -76,11 +77,14 @@ square4 = Square()
 	#Balloon Default Values 
 #balloonX = 100
 #balloonY = 100
-radius = 20
-thickness = 0
+#radius = 20
+#thickness = 0
+
+balloonsInList = 0
 balloonSpawn = 1
 
 font1 = pygame.font.SysFont('freesanbold.ttf', 50)
+font2 = pygame.font.SysFont('freesanbold.ttf', 50)
 mouse1 = False
 
 xchange = 10
@@ -96,7 +100,9 @@ play = True
 
 zeroZero = (0,0)
 
+#TEXT
 text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
+loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 
 pointsBox = text1.get_rect()
 
@@ -122,7 +128,7 @@ while play:
 					points += pointsValue
 					newint = circle.index
 					for x in range(newint, len(circleGroup)):
-						circleGroup[x].index -= 1
+						circleGroup[x].index -= 10
 					del circleGroup[newint]
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
@@ -140,13 +146,14 @@ while play:
 		xchange = xchange*-1*random.randrange(1, 5)
 	if y >= 800 or x <= 0:
 		ychange = ychange*-1*random.randrange(1, 5)"""
-	screen.blit(square2.surf,(40,530))
-	screen.blit(square3.surf,(730,40))
-	screen.blit(square4.surf,(730,530))
+	#screen.blit(square2.surf,(40,530))
+	#screen.blit(square3.surf,(730,40))
+	#screen.blit(square4.surf,(730,530))
 	text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
 	#circleGroup.append(Circle())
 	for x in range(balloonSpawn):
 		circleGroup.append(Circle())
+		balloonsInList = len(circleGroup)
 		for circle in circleGroup:
 			circle.index = circleCounter
 			circle.drawCircle()
@@ -161,5 +168,13 @@ while play:
 		pygame.draw.circle(screen, color, center_point, radius, thickness)"""
 	screen.blit(text1, pointsBox)
 	circleCounter = 0
+	if balloonsInList > 100:
+		loseText = font2.render("YOU LOSE", True, (255, 0, 0))
+		loseBox = loseText.get_rect()
+		loseBox.center = (400, 300)
+		screen.blit(loseText, loseBox)
+		pygame.display.flip()
+		time.sleep(5)
+		quit()
 	#Test End
 	pygame.display.flip()
