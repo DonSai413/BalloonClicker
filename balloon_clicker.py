@@ -54,8 +54,8 @@ square4 = Square()
 
 #VARIABLES
 	#Balloon Position 
-balloonX = 0
-balloonY = 0
+balloonX = 100
+balloonY = 100
 
 font1 = pygame.font.SysFont('freesanbold.ttf', 50)
 mouse1 = False
@@ -75,19 +75,9 @@ pointsBox = text1.get_rect()
 
 pointsBox.center = (700, 100)
 
-clockSpeed = 1
+clockSpeed = .5
 #GAME LOOP
 while play:
-	radius = 20
-	text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
-	balloonX = random.randrange(1, 799)
-	balloonY = random.randrange(1, 599)
-	red = random.randrange(100, 150)
-	green = random.randrange(100, 150)
-	blue = random.randrange(100, 150)
-	color = (red, green, blue)
-	thickness = 0;
-	center_point = (balloonX, balloonY)
 	clock.tick(clockSpeed)
 	#ticks = pygame.time.get_ticks()
 	#screen.blit(square5.surf, (0, 0))
@@ -120,6 +110,16 @@ while play:
 	screen.blit(square2.surf,(40,530))
 	screen.blit(square3.surf,(730,40))
 	screen.blit(square4.surf,(730,530))
+	radius = 20
+	text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
+	balloonX = random.randrange(1, 799)
+	balloonY = random.randrange(1, 599)
+	red = random.randrange(100, 150)
+	green = random.randrange(100, 150)
+	blue = random.randrange(100, 150)
+	color = (red, green, blue)
+	thickness = 0;
+	center_point = (balloonX, balloonY)
 	screen.blit(text1, pointsBox)
 	pygame.draw.circle(screen, color, center_point, radius, thickness)
 	#Test End
