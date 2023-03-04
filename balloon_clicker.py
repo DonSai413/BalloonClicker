@@ -101,12 +101,12 @@ play = True
 zeroZero = (0,0)
 
 #TEXT
-text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
+text1 = font1.render(f"Points: {points}", True, (20, 10, 150))
 loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 
 pointsBox = text1.get_rect()
 
-pointsBox.center = (700, 100)
+pointsBox.center = (700, 50)
 
 clockSpeed = 1
 #GAME LOOP
@@ -128,7 +128,7 @@ while play:
 					points += pointsValue
 					newint = circle.index
 					for x in range(newint, len(circleGroup)):
-						circleGroup[x].index -= 10
+						circleGroup[x].index -= 1
 					del circleGroup[newint]
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
@@ -149,7 +149,7 @@ while play:
 	#screen.blit(square2.surf,(40,530))
 	#screen.blit(square3.surf,(730,40))
 	#screen.blit(square4.surf,(730,530))
-	text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
+	text1 = font1.render(f"Points: {points}", True, (20, 10, 150))
 	#circleGroup.append(Circle())
 	for x in range(balloonSpawn):
 		circleGroup.append(Circle())
@@ -158,6 +158,12 @@ while play:
 			circle.index = circleCounter
 			circle.drawCircle()
 			circleCounter += 1
+
+		"""
+		#Note: Attempt to fix multi-circle deletion bug. Come back
+		#to later if time.
+		for circle in circleGroup:
+			print(circle.index)"""
 		"""balloonX = random.randrange(1, 799)
 		balloonY = random.randrange(1, 599)
 		red = random.randrange(100, 150)
@@ -169,10 +175,18 @@ while play:
 	screen.blit(text1, pointsBox)
 	circleCounter = 0
 	if balloonsInList > 100:
-		loseText = font2.render("YOU LOSE", True, (255, 0, 0))
+		#loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 		loseBox = loseText.get_rect()
 		loseBox.center = (400, 300)
 		screen.blit(loseText, loseBox)
+		pygame.display.flip()
+		time.sleep(5)
+		quit()
+	if points > 10000:
+		winText = font2.render("YOU WIN", True, (0, 255, 0))
+		winBox = winText.get_rect()
+		winBox.center = (400, 300)
+		screen.blit(winText, winBox)
 		pygame.display.flip()
 		time.sleep(5)
 		quit()
