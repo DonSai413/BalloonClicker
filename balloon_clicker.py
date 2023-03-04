@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import random
 import sys
+from collections import defaultdict
 
 # Define our square object and call super to
 # give it all the properties and methods of pygame.sprite.Sprite
@@ -34,16 +35,16 @@ clock = pygame.time.Clock()
 
 class Circle(pygame.sprite.Sprite):
 	def __new__(cls, *args, **kwargs):
-		print("1. Create a new instance of Circle.")
+		#print("1. Create a new instance of Circle.")
 		return super().__new__(cls)
 	def __init__(self):
 		self.index = 0
 		self.radius = 20
 		self.balloonX = random.randrange(1, 799)
 		self.balloonY = random.randrange(1, 599)
-		self.red = random.randrange(100, 150)
-		self.green = random.randrange(100, 150)
-		self.blue = random.randrange(100, 150)
+		self.red = random.randrange(0, 255)
+		self.green = random.randrange(0, 255)
+		self.blue = random.randrange(0, 255)
 		self.color = (self.red, self.green, self.blue)
 		self.thickness = 0;
 		self.center_point = (self.balloonX, self.balloonY)
@@ -120,6 +121,8 @@ while play:
 				if mousePos >= (circle.balloonX - circle.radius, circle.balloonY - circle.radius) and mousePos <= (circle.balloonX + circle.radius, circle.balloonY + circle.radius):
 					points += pointsValue
 					newint = circle.index
+					for x in range(newint, len(circleGroup)):
+						circleGroup[x].index -= 1
 					del circleGroup[newint]
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
