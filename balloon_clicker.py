@@ -21,10 +21,22 @@ class Square(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect()
 #Test End
 
+class Circle(pygame.sprite.Sprite):
+	radius = 20
+	balloonX = random.randrange(1, 799)
+	balloonY = random.randrange(1, 599)
+	red = random.randrange(100, 150)
+	green = random.randrange(100, 150)
+	blue = random.randrange(100, 150)
+	color = (red, green, blue)
+	thickness = 0;
+	center_point = (balloonX, balloonY)
+
 image = pygame.image.load("sky_image.jpg")
 
 #GAME INITIALIZATION
 pygame.init()
+pygame.font.init()
 pygame.display.set_caption("Balloon Clicker")
 screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
@@ -41,20 +53,33 @@ square4 = Square()
 #Test End
 
 #VARIABLES
+	#Balloon Position 
 balloonX = 0
 balloonY = 0
 
+font1 = pygame.font.SysFont('freesanbold.ttf', 50)
+mouse1 = False
+
 xchange = 10
 ychange = 10
+
+points = 0
 
 play = True
 
 zeroZero = (0,0)
 
+text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
+
+pointsBox = text1.get_rect()
+
+pointsBox.center = (700, 100)
+
 clockSpeed = 1
 #GAME LOOP
 while play:
-	radius = 10
+	radius = 20
+	text1 = font1.render(f"Points: {points}", True, (0, 255, 0))
 	balloonX = random.randrange(1, 799)
 	balloonY = random.randrange(1, 599)
 	red = random.randrange(100, 150)
@@ -73,10 +98,16 @@ while play:
 				play = False
 		elif event.type == QUIT:
 			play = False
-		#elif event.type == MOUSEDOWN:
-			#play = False
+		elif event.type == MOUSEBUTTONDOWN:
+			mouse1 = True
+			mousePos = pygame.mouse.get_pos()
+			if mousePos >= (balloonX - radius, balloonY - radius) and mousePos <= (balloonX + radius, balloonY + radius):
+				points += 1
+		elif event.type == MOUSEBUTTONUP:
+			mouse1 = False
 	#Test Start
 	screen.fill((0, 0, 0))
+	#points += 1
 	screen.blit(image, dest = zeroZero)
 	#screen.blit(square1.surf,(balloonX,balloonY))
 	#if ticks > 10000:
@@ -89,6 +120,7 @@ while play:
 	screen.blit(square2.surf,(40,530))
 	screen.blit(square3.surf,(730,40))
 	screen.blit(square4.surf,(730,530))
+	screen.blit(text1, pointsBox)
 	pygame.draw.circle(screen, color, center_point, radius, thickness)
 	#Test End
 	pygame.display.flip()
