@@ -41,7 +41,7 @@ clock = pygame.time.Clock()
 imageName = ["sky_image.jpg"]
 image = pygame.image.load(imageName[0])
 
-musicName = ["pop.mp3", "victory.mp3"]
+musicName = ["pop.mp3", "victory.mp3", "lose.mp3"]
 mixer.music.load(musicName[0])
 mixer.music.set_volume(.3)
 
@@ -105,7 +105,7 @@ ychange = 10
 circleCounter = 0;
 autoPopCounter = 0;
 
-points = 998
+points = 0
 pointsValue = 1
 
 clockSpeed = 30
@@ -274,7 +274,7 @@ while play:
 					points = points - pointsCost
 					pointsCost *= 1.25
 			elif  iterator[1] >= 175 and iterator[1] <= 225:
-				if points >= speedUpCost:
+				if points >= speedUpCost and timerbase < clockSpeed:
 					timerbase += 1
 					points = points - speedUpCost
 					speedUpCost = 10 * timerbase
@@ -305,12 +305,15 @@ while play:
 						mixer.music.load(musicName[0])
 						mixer.music.play()
 		mouseClickBacklog.remove(iterator)
-	if balloonsInList > 100:
+	if len(circleGroup) > 100:
 		#loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 		loseBox = loseText.get_rect()
 		loseBox.center = (400, 300)
 		screen.blit(loseText, loseBox)
 		pygame.display.flip()
+		mixer.music.load(musicName[2])
+		mixer.music.set_volume(.2)
+		mixer.music.play()
 		time.sleep(5)
 		quit()
 	if points > 1000:
