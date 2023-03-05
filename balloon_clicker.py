@@ -5,6 +5,7 @@ import sys
 from collections import defaultdict
 import time
 import numpy as np
+import math
 
 # Define our square object and call super to
 # give it all the properties and methods of pygame.sprite.Sprite
@@ -262,12 +263,12 @@ while play:
 					timerbase -= 1
 					points = points - speedDownCost
 					speedDownCost = speedUpCost / 5
-			elif x[1] >= 325 and x[1] <= 375:
+			elif iterator[1] >= 325 and iterator[1] <= 375:
 				if points >= balloonSpawnCost:
 					balloonSpawn += 1
 					points = points - balloonSpawnCost
 					balloonSpawnCost *= 1.5
-			elif x[1] >= 400 and x[1] <= 450:
+			elif iterator[1] >= 400 and iterator[1] <= 450:
 				if points >= autoPopCost:
 					autoPop += 1
 					points = points - autoPopCost
@@ -299,8 +300,11 @@ while play:
 		time.sleep(5)
 		quit()
 	while autoPopCounter < autoPop:
-		if(balloonsInList != 0):
-			circleGroup.pop()
+		autoPopCounter += 1
+		if(len(circleGroup) != 0):
+			print(balloonsInList)
+			print(len(circleGroup)-1)
+			del circleGroup[len(circleGroup)-1]
 			points += pointsValue
 	#Test End
 	autoPopCounter = 0;
