@@ -105,7 +105,7 @@ ychange = 10
 circleCounter = 0;
 autoPopCounter = 0;
 
-points = 0
+points = 100
 pointsValue = 1
 
 clockSpeed = 30
@@ -206,7 +206,7 @@ while play:
 		screen.blit(image, dest = zeroZero)
 		for x in range(balloonSpawn):
 			circleGroup.append(Circle())
-			balloonsInList = len(circleGroup)
+			#balloonsInList = len(circleGroup)
 			for circle in circleGroup:
 				circle.index = circleCounter
 				circle.drawCircle()
@@ -254,6 +254,17 @@ while play:
 		#screen.blit(loseText, loseBox)
 		#END OF BUTTONS
 		circleCounter = 0
+		while autoPopCounter < autoPop:
+			autoPopCounter += 1
+			#print(autoPopCounter)
+			#print(autoPop)
+			if(len(circleGroup) != 0):
+				#print(balloonsInList)
+				#print(len(circleGroup)-1)
+				del circleGroup[len(circleGroup)-1]
+				mixer.music.load(musicName[0])
+				mixer.music.play()
+				points += pointsValue
 	for iterator in mouseClickBacklog:
 		#print(mouseClickBacklog)
 		if iterator[0] >= 600 and iterator[0]  <= 800:
@@ -287,10 +298,11 @@ while play:
 				if iterator[0] >= (circle.balloonX - circle.radius) and iterator[0] <= (circle.balloonX + circle.radius):
 					if iterator[1] >= (circle.balloonY - circle.radius) and iterator[1] <= (circle.balloonY + circle.radius):
 						points += pointsValue
-						newint = circle.index
+						newint = circleGroup.index(circle)
 						for x in range(newint, len(circleGroup)):
 							circleGroup[x].index -= 1
 						del circleGroup[newint]
+						mixer.music.load(musicName[0])
 						mixer.music.play()
 		mouseClickBacklog.remove(iterator)
 	if balloonsInList > 100:
@@ -301,7 +313,7 @@ while play:
 		pygame.display.flip()
 		time.sleep(5)
 		quit()
-	if points > 10000:
+	if points > 1000:
 		winText = font2.render("YOU WIN", True, (0, 255, 0))
 		winBox = winText.get_rect()
 		winBox.center = (400, 300)
@@ -309,17 +321,10 @@ while play:
 		pygame.display.flip()
 		time.sleep(5)
 		quit()
-		if (popSpeed % clockSpeed == 0):
-			popSpeed = 0
-			while autoPopCounter < autoPop:
-				autoPopCounter += 1
-				if(len(circleGroup) != 0):
-					print(balloonsInList)
-					print(len(circleGroup)-1)
-					del circleGroup[len(circleGroup)-1]
-					points += pointsValue
 	#Test End
 	autoPopCounter = 0;
 	timer2 += 1
-	popSpeed += 5
+	#popSpeed += 3
+	#if popSpeed > clockSpeed:
+	#	popSpeed = 0
 	pygame.display.flip()
