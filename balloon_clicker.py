@@ -70,7 +70,7 @@ ychange = 10
 circleCounter = 0;
 autoPopCounter = 0;
 
-points = 998
+points = 0
 pointsValue = 1
 
 clockSpeed = 30
