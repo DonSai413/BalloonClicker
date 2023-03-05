@@ -3,30 +3,9 @@ from pygame.locals import *
 from pygame import mixer
 import random
 import sys
-from collections import defaultdict
 import time
 import numpy as np
 import math
-
-# Define our square object and call super to
-# give it all the properties and methods of pygame.sprite.Sprite
-# Define the class for our square objects
-#ASSET INITIALIZATION
-#Test Start
-class Square(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Square, self).__init__()
-         
-        # Define the dimension of the surface
-        # Here we are making squares of side 25px
-        self.surf = pygame.Surface((25, 25))
-         
-        # Define the color of the surface using RGB color coding.
-        self.surf.fill((0, 200, 255))
-        self.rect = self.surf.get_rect()
-#Test End
-
-
 
 #GAME INITIALIZATION
 pygame.init()
@@ -70,36 +49,10 @@ class Circle(pygame.sprite.Sprite):
 		self.color = (self.red, self.green, self.blue)
 		self.thickness = 0;
 		self.center_point = (self.balloonX, self.balloonY)
-	#random.seed(clock.get_time())
-	"""balloonX = random.randrange(1, 799)
-	balloonY = random.randrange(1, 599)
-	red = random.randrange(100, 150)
-	green = random.randrange(100, 150)
-	blue = random.randrange(100, 150)
-	color = (red, green, blue)
-	thickness = 0;
-	center_point = (balloonX, balloonY)"""
 	def drawCircle(self):
-		#print("DrawCircle is running.")
-		#print(self.balloonX,self.balloonY)
 		pygame.draw.circle(screen, self.color, self.center_point, self.radius, self.thickness)
-#SPRITE INITIALIZATION
-#Test Start
-#square1 = Square()
-#square2 = Square()
-#square3 = Square()
-#square4 = Square()
-#square5 = Square()
-#square5.surf.fill(0,0,255)
-#square5.surf = pygame.Surface((800,600))
-#Test End
 
 #VARIABLES
-	#Balloon Default Values 
-#balloonX = 100
-#balloonY = 100
-#radius = 20
-#thickness = 0
 
 balloonsInList = 0
 balloonSpawn = 1
@@ -117,7 +70,7 @@ ychange = 10
 circleCounter = 0;
 autoPopCounter = 0;
 
-points = 0
+points = 998
 pointsValue = 1
 
 clockSpeed = 30
@@ -172,7 +125,7 @@ playBox = playText.get_rect()
 quitBox = quitText.get_rect()
 infoBox = infoText.get_rect()
 
-pointsBox.center = (700, 50)
+pointsBox.center = (650, 50)
 pointsPurchaseBox.center = (700, 125)
 speedUpBox.center = (700, 200)
 speedDownBox.center = (700, 275)
@@ -201,10 +154,6 @@ while menu:
 					ping()
 				elif mousePos2[1] > 475 and mousePos2[1] < 525:
 					quit()
-			"""if mousePos >= (600, 100) and mousePos <=(800, 123):
-				print("It's the comparisons")
-			elif mousePos >= (600, 200):
-				print("It's not the comparisons")"""
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
 		elif event.type == QUIT:
@@ -214,7 +163,6 @@ while menu:
 	screen.blit(quitText, quitBox)
 	pygame.display.flip()
 #GAME LOOP
-#circleGroup.append(Circle())
 screen.fill((0, 0, 0))
 screen.blit(infoText, infoBox)
 pygame.display.flip()
@@ -222,8 +170,6 @@ time.sleep(5)
 pygame.display.flip()
 while play:
 	clock.tick(clockSpeed)
-	#ticks = pygame.time.get_ticks()
-	#screen.blit(square5.surf, (0, 0))
 	#EVENT CAPTURING
 	for event in pygame.event.get():
 		if event.type == KEYDOWN:
@@ -233,56 +179,26 @@ while play:
 			mousePos = list(pygame.mouse.get_pos())
 			mousePos2 = [int(mousePos[0]), int(mousePos[1])]
 			mouseClickBacklog.append(mousePos2)
-			"""if mousePos >= (600, 100) and mousePos <=(800, 123):
-				print("It's the comparisons")
-			elif mousePos >= (600, 200):
-				print("It's not the comparisons")"""
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
 		elif event.type == QUIT:
 			play = False
-	#Test Start	
-	#points += 1
-	#screen.blit(square1.surf,(balloonX,balloonY))
-	#if ticks > 10000:
-	#x = random.randrange(1, 800)
-	#y = random.randrange(1, 600)
-	"""if x >= 600 or x <= 0:
-		xchange = xchange*-1*random.randrange(1, 5)
-	if y >= 800 or x <= 0:
-		ychange = ychange*-1*random.randrange(1, 5)"""
-	#screen.blit(square2.surf,(40,530))
-	#screen.blit(square3.surf,(730,40))
-	#screen.blit(square4.surf,(730,530))
+	
 	text1 = font1.render(f"Points: {points}", True, (20, 10, 150))
-	#circleGroup.append(Circle())
-	#print(pygame.time.get_ticks())
+	#ITEM SPAWN LOOP
 	if (timer2 % clockSpeed == 0):
 		timer2 = timerbase
 		screen.fill((0, 0, 0))
 		screen.blit(image, dest = zeroZero)
 		for x in range(balloonSpawn):
 			circleGroup.append(Circle())
-			#balloonsInList = len(circleGroup)
 			for circle in circleGroup:
 				circle.index = circleCounter
 				circle.drawCircle()
 				circleCounter += 1
 
-			"""
-			#Note: Attempt to fix multi-circle deletion bug. Come back
-			#to later if time.
-			for circle in circleGroup:
-				print(circle.index)"""
-			"""balloonX = random.randrange(1, 799)
-			balloonY = random.randrange(1, 599)
-			red = random.randrange(100, 150)
-			green = random.randrange(100, 150)
-			blue = random.randrange(100, 150)
-			color = (red, green, blue)
-			center_point = (balloonX, balloonY)
-			pygame.draw.circle(screen, color, center_point, radius, thickness)"""
 		screen.blit(text1, pointsBox)
+
 		#BUTTONS
 		drawButton(600, 100)
 		morePoints = buttonFont.render(f"More Points per Balloon: {pointsCost}", True, (0, 0, 0))
@@ -308,9 +224,9 @@ while play:
 		screen.blit(autoPopText1, autoPopBox1)
 		screen.blit(autoPopText2, autoPopBox2)
 
-		#screen.blit(loseText, loseBox)
 		#END OF BUTTONS
 		circleCounter = 0
+		#AUTOPOPPER
 		while autoPopCounter < autoPop:
 			autoPopCounter += 1
 			#print(autoPopCounter)
@@ -323,6 +239,7 @@ while play:
 				mixer.music.set_volume(.3)
 				mixer.music.play()
 				points += pointsValue
+	#CLICK HANDLER
 	for iterator in mouseClickBacklog:
 		#print(mouseClickBacklog)
 		if iterator[0] >= 600 and iterator[0]  <= 800:
@@ -379,8 +296,8 @@ while play:
 						mixer.music.set_volume(.3)
 						mixer.music.play()
 		mouseClickBacklog.remove(iterator)
+	#WIN/LOSE MESSAGES
 	if len(circleGroup) > 100:
-		#loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 		loseBox = loseText.get_rect()
 		loseBox.center = (400, 300)
 		screen.blit(loseText, loseBox)
@@ -406,16 +323,15 @@ while play:
 		winBox2.center = (400, 350)
 		screen.blit(winText2, winBox2)
 		screen.blit(winText, winBox)
+		#text1 = font1.render(f"Points: {points}", True, (20, 10, 150))
+		screen.blit(text1, pointsBox)
 		pygame.display.flip()
 		mixer.music.load(musicName[1])
 		mixer.music.set_volume(.2)
 		mixer.music.play()
 		time.sleep(5)
 		quit()
-	#Test End
+
 	autoPopCounter = 0;
 	timer2 += 1
-	#popSpeed += 3
-	#if popSpeed > clockSpeed:
-	#	popSpeed = 0
 	pygame.display.flip()
