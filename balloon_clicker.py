@@ -41,12 +41,17 @@ clock = pygame.time.Clock()
 imageName = ["sky_image.jpg"]
 image = pygame.image.load(imageName[0])
 
-musicName = ["pop.mp3", "victory.mp3", "lose.mp3", "wrong.mp3"]
+musicName = ["pop.mp3", "victory.mp3", "lose.mp3", "wrong.mp3", "Ping.mp3"]
 mixer.music.load(musicName[0])
 mixer.music.set_volume(.3)
 
 def wrong():
 	mixer.music.load(musicName[3])
+	mixer.music.set_volume(.1)
+	mixer.music.play()
+
+def ping():
+	mixer.music.load(musicName[4])
 	mixer.music.set_volume(.1)
 	mixer.music.play()
 
@@ -193,6 +198,7 @@ while menu:
 			if mousePos2[0] > 350 and mousePos2[0] < 425:
 				if mousePos2[1] > 375 and mousePos2[1] < 425:
 					menu = False
+					ping()
 				elif mousePos2[1] > 475 and mousePos2[1] < 525:
 					quit()
 			"""if mousePos >= (600, 100) and mousePos <=(800, 123):
@@ -322,6 +328,7 @@ while play:
 		if iterator[0] >= 600 and iterator[0]  <= 800:
 			if iterator[1] >= 100 and iterator[1] <= 150:
 				if points >= pointsCost:
+					ping()
 					pointsValue += 1
 					points = points - pointsCost
 					pointsCost *= 1.25
@@ -329,6 +336,7 @@ while play:
 					wrong()
 			elif  iterator[1] >= 175 and iterator[1] <= 225:
 				if points >= speedUpCost and timerbase < clockSpeed:
+					ping()
 					timerbase += 1
 					points = points - speedUpCost
 					speedUpCost = 10 * timerbase
@@ -336,6 +344,7 @@ while play:
 					wrong()
 			elif iterator[1] >= 250 and iterator[1] <= 300:
 				if points >= speedDownCost and timerbase > 1:
+					ping()
 					timerbase -= 1
 					points = points - speedDownCost
 					speedDownCost = speedUpCost / 5
@@ -343,6 +352,7 @@ while play:
 					wrong()
 			elif iterator[1] >= 325 and iterator[1] <= 375:
 				if points >= balloonSpawnCost:
+					ping()
 					balloonSpawn += 1
 					points = points - balloonSpawnCost
 					balloonSpawnCost *= 1.5
@@ -350,6 +360,7 @@ while play:
 					wrong()
 			elif iterator[1] >= 400 and iterator[1] <= 450:
 				if points >= autoPopCost:
+					ping()
 					autoPop += 1
 					points = points - autoPopCost
 					autoPopCost *= 1.75
