@@ -4,6 +4,7 @@ import random
 import sys
 from collections import defaultdict
 import time
+import numpy as np
 
 # Define our square object and call super to
 # give it all the properties and methods of pygame.sprite.Sprite
@@ -158,16 +159,51 @@ while play:
 			if event.key == K_BACKSPACE:
 				play = False
 		elif event.type == MOUSEBUTTONDOWN:
+			mousePos = (0,0)
 			mouse1 = True
-			mousePos = pygame.mouse.get_pos()
-			for circle in circleGroup:
-				if mousePos >= (circle.balloonX - circle.radius, circle.balloonY - circle.radius) and mousePos <= (circle.balloonX + circle.radius, circle.balloonY + circle.radius):
-					points += pointsValue
-					newint = circle.index
-					for x in range(newint, len(circleGroup)):
-						circleGroup[x].index -= 1
-					del circleGroup[newint]
-					break
+			mousePos = list(pygame.mouse.get_pos())
+			mousePos2 = [int(mousePos[0]), int(mousePos[1])]
+			"""if mousePos >= (600, 100) and mousePos <=(800, 123):
+				print("It's the comparisons")
+			elif mousePos >= (600, 200):
+				print("It's not the comparisons")"""
+			print(mousePos2)
+			if mousePos2[0] >= 600 and mousePos2[0]  <= 800:
+				if mousePos2[1] >= 100 and mousePos2[1] <= 150:
+					if points >= pointsCost:
+						pointsValue += 1
+						points = points - pointsCost
+						pointsCost *= 1.25
+				elif  mousePos2[1] >= 175 and mousePos2[1] <= 225:
+					if points >= speedUpCost:
+						clockSpeed += 1
+						points = points - speedUpCost
+						speedUpCost = 10 * clockSpeed
+				elif mousePos2[1] >= 250 and mousePos2[1] <= 300:
+					if points >= speedDownCost and clockSpeed > 1:
+						clockSpeed -= 1
+						points = points - speedDownCost
+						speedUpCost = speedDownCost / 5
+				elif mousePos2[1] >= 325 and mousePos2[1] <= 375:
+					if points >= balloonSpawnCost:
+						balloonSpawn += 1
+						points = points - balloonSpawnCost
+						balloonSpawnCost *= 1.5
+				elif mousePos2[1] >= 400 and mousePos2[1] <= 450:
+					if points >= autoPopCost:
+						autoPop += 1
+						points = points - autoPopCost
+						autoPopCost *= 1.75
+			else:
+				for circle in circleGroup:
+					if mousePos2[0] >= (circle.balloonX - circle.radius) and mousePos2[0] <= (circle.balloonX + circle.radius):
+						if mousePos2[1] >= (circle.balloonY - circle.radius) and mousePos2[1] <= (circle.balloonY + circle.radius):
+							points += pointsValue
+							newint = circle.index
+							for x in range(newint, len(circleGroup)):
+								circleGroup[x].index -= 1
+							del circleGroup[newint]
+							break
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
 		elif event.type == QUIT:
