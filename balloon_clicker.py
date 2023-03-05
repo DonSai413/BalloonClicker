@@ -372,9 +372,20 @@ while play:
 		time.sleep(5)
 		quit()
 	if points > 1000:
+		winTime = pygame.time.get_ticks()
+		winTimeS = math.floor(winTime/1000)
+		winTimeM = math.floor(winTimeS/60)
+		winTimeTrueS = (winTimeS-winTimeM*60)
 		winText = font2.render("YOU WIN", True, (0, 255, 0))
+		if len(str(winTimeTrueS)) == 1:
+			winText2 = buttonFont.render(f"Time: {winTimeM}:0{winTimeTrueS}", True, (0, 0, 0))
+		else:
+			winText2 = buttonFont.render(f"Time: {winTimeM}:{winTimeTrueS}", True, (0, 0, 0))
 		winBox = winText.get_rect()
+		winBox2 = winText2.get_rect()
 		winBox.center = (400, 300)
+		winBox2.center = (400, 350)
+		screen.blit(winText2, winBox2)
 		screen.blit(winText, winBox)
 		pygame.display.flip()
 		mixer.music.load(musicName[1])
