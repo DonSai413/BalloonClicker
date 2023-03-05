@@ -101,6 +101,7 @@ balloonSpawn = 1
 
 font1 = pygame.font.SysFont('freesanbold.ttf', 50)
 font2 = pygame.font.SysFont('freesanbold.ttf', 100)
+titleFont = pygame.font.SysFont('freesanbold.ttf', 100)
 buttonFont = pygame.font.SysFont('freesanbold.ttf', 20)
 mouse1 = False
 
@@ -127,6 +128,7 @@ autoPopCost = 100
 
 circleGroup = list()
 play = True
+menu = True
 
 gray = (100, 100, 100)
 zeroZero = (0,0)
@@ -146,6 +148,9 @@ balloonSpawnText2 = buttonFont.render(f"tick: {balloonSpawnCost}", True, (0, 0, 
 autoPopText1 = buttonFont.render(f"Auto-pops balloons if there", True, (0, 0, 0))
 autoPopText2 = buttonFont.render(f"are any: {autoPopCost}", True, (0, 0, 0))
 loseText = font2.render("YOU LOSE", True, (255, 0, 0))
+titleText = titleFont.render("BALLOON CLICKER", True, (255, 255, 255))
+playText = font1.render("PLAY", True, (255, 255, 255))
+quitText = font1.render("QUIT", True, (255, 255, 255))
 
 pointsBox = text1.get_rect()
 pointsPurchaseBox = morePoints.get_rect()
@@ -155,6 +160,9 @@ balloonSpawnBox1 = balloonSpawnText1.get_rect()
 balloonSpawnBox2 = balloonSpawnText2.get_rect()
 autoPopBox1 = autoPopText1.get_rect()
 autoPopBox2 = autoPopText2.get_rect()
+titleBox = titleText.get_rect()
+playBox = playText.get_rect()
+quitBox = quitText.get_rect()
 
 
 pointsBox.center = (700, 50)
@@ -165,7 +173,37 @@ balloonSpawnBox1.center = (700, 350)
 balloonSpawnBox2.center = (700, 360)
 autoPopBox1.center = (700, 425)
 autoPopBox2.center = (700, 435)
+titleBox.center = (400, 200)
+playBox = (375, 400)
+quitBox = (375, 500)
 
+#MENU LOOP
+while menu:
+	clock.tick(clockSpeed)
+	for event in pygame.event.get():
+		if event.type == KEYDOWN:
+			if event.key == K_BACKSPACE:
+				quit()
+		elif event.type == MOUSEBUTTONDOWN:
+			mousePos = list(pygame.mouse.get_pos())
+			mousePos2 = [int(mousePos[0]), int(mousePos[1])]
+			if mousePos2[0] > 350 and mousePos2[0] < 425:
+				if mousePos2[1] > 375 and mousePos2[1] < 425:
+					menu = False
+				elif mousePos2[1] > 475 and mousePos2[1] < 525:
+					quit()
+			"""if mousePos >= (600, 100) and mousePos <=(800, 123):
+				print("It's the comparisons")
+			elif mousePos >= (600, 200):
+				print("It's not the comparisons")"""
+		elif event.type == MOUSEBUTTONUP:
+			mouse1 = False
+		elif event.type == QUIT:
+			quit()
+	screen.blit(titleText, titleBox)
+	screen.blit(playText, playBox)
+	screen.blit(quitText, quitBox)
+	pygame.display.flip()
 #GAME LOOP
 #circleGroup.append(Circle())
 while play:
