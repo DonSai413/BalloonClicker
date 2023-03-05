@@ -24,14 +24,15 @@ class Square(pygame.sprite.Sprite):
 #Test End
 
 
-
 image = pygame.image.load("sky_image.jpg")
 
 #GAME INITIALIZATION
 pygame.init()
 pygame.font.init()
 pygame.display.set_caption("Balloon Clicker")
-screen = pygame.display.set_mode((800, 600))
+width = 800
+height = 600
+screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 
 class Circle(pygame.sprite.Sprite):
@@ -41,7 +42,7 @@ class Circle(pygame.sprite.Sprite):
 	def __init__(self):
 		self.index = 0
 		self.radius = 20
-		self.balloonX = random.randrange(1, 799)
+		self.balloonX = random.randrange(1, 599)
 		self.balloonY = random.randrange(1, 599)
 		self.red = random.randrange(0, 255)
 		self.green = random.randrange(0, 255)
@@ -64,10 +65,10 @@ class Circle(pygame.sprite.Sprite):
 		pygame.draw.circle(screen, self.color, self.center_point, self.radius, self.thickness)
 #SPRITE INITIALIZATION
 #Test Start
-square1 = Square()
-square2 = Square()
-square3 = Square()
-square4 = Square()
+#square1 = Square()
+#square2 = Square()
+#square3 = Square()
+#square4 = Square()
 #square5 = Square()
 #square5.surf.fill(0,0,255)
 #square5.surf = pygame.Surface((800,600))
@@ -85,7 +86,7 @@ balloonSpawn = 1
 
 font1 = pygame.font.SysFont('freesanbold.ttf', 50)
 font2 = pygame.font.SysFont('freesanbold.ttf', 100)
-buttonFont = pygame.font.SysFont('freesanbold.ttf', 30)
+buttonFont = pygame.font.SysFont('freesanbold.ttf', 20)
 mouse1 = False
 
 xchange = 10
@@ -109,17 +110,41 @@ autoPopCost = 100
 circleGroup = list()
 play = True
 
+gray = (100, 100, 100)
 zeroZero = (0,0)
+
+def drawButton (posX, posY):
+	pygame.draw.rect(screen , gray, [posX, posY, 200, 50])
 
 #TEXT
 text1 = font1.render(f"Points: {points}", True, (20, 10, 150))
 morePoints = buttonFont.render(f"More Points per Balloon: {pointsCost}", True, (0, 0, 0))
+speedUpText = buttonFont.render(f"Speed up: {speedUpCost}", True, (0, 0, 0))
+speedDownText = buttonFont.render(f"Slow down: {speedDownCost}", True, (0, 0, 0))
+balloonSpawnText1 = buttonFont.render(f"Spawn more balloons per ", True, (0, 0, 0))
+balloonSpawnText2 = buttonFont.render(f"tick: {balloonSpawnCost}", True, (0, 0, 0))
+autoPopText1 = buttonFont.render(f"Auto-pops balloons if there", True, (0, 0, 0))
+autoPopText2 = buttonFont.render(f"are any: {autoPopCost}", True, (0, 0, 0))
 loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 
 pointsBox = text1.get_rect()
+pointsPurchaseBox = morePoints.get_rect()
+speedUpBox = speedUpText.get_rect()
+speedDownBox = speedDownText.get_rect()
+balloonSpawnBox1 = balloonSpawnText1.get_rect()
+balloonSpawnBox2 = balloonSpawnText2.get_rect()
+autoPopBox1 = autoPopText1.get_rect()
+autoPopBox2 = autoPopText2.get_rect()
+
 
 pointsBox.center = (700, 50)
-
+pointsPurchaseBox.center = (700, 125)
+speedUpBox.center = (700, 200)
+speedDownBox.center = (700, 275)
+balloonSpawnBox1.center = (700, 350)
+balloonSpawnBox2.center = (700, 360)
+autoPopBox1.center = (700, 425)
+autoPopBox2.center = (700, 435)
 
 #GAME LOOP
 #circleGroup.append(Circle())
@@ -186,6 +211,33 @@ while play:
 		center_point = (balloonX, balloonY)
 		pygame.draw.circle(screen, color, center_point, radius, thickness)"""
 	screen.blit(text1, pointsBox)
+	#BUTTONS
+	drawButton(600, 100)
+	morePoints = buttonFont.render(f"More Points per Balloon: {pointsCost}", True, (0, 0, 0))
+	screen.blit(morePoints,pointsPurchaseBox)
+
+	drawButton(600, 175)
+	speedUpText = buttonFont.render(f"Speed up: {speedUpCost}", True, (0, 0, 0))
+	screen.blit(speedUpText,speedUpBox)
+
+	drawButton(600, 250)
+	speedDownText = buttonFont.render(f"Slow down: {speedDownCost}", True, (0, 0, 0))
+	screen.blit(speedDownText, speedDownBox)
+
+	drawButton(600, 325)
+	balloonSpawnText1 = buttonFont.render(f"Spawn more balloons per ", True, (0, 0, 0))
+	balloonSpawnText2 = buttonFont.render(f"tick: {balloonSpawnCost}", True, (0, 0, 0))
+	screen.blit(balloonSpawnText1, balloonSpawnBox1)
+	screen.blit(balloonSpawnText2, balloonSpawnBox2)
+
+	drawButton(600, 400)
+	autoPopText1 = buttonFont.render(f"Auto-pops balloons if there", True, (0, 0, 0))
+	autoPopText2 = buttonFont.render(f"are any: {autoPopCost}", True, (0, 0, 0))
+	screen.blit(autoPopText1, autoPopBox1)
+	screen.blit(autoPopText2, autoPopBox2)
+
+	#screen.blit(loseText, loseBox)
+	#END OF BUTTONS
 	circleCounter = 0
 	if balloonsInList > 100:
 		#loseText = font2.render("YOU LOSE", True, (255, 0, 0))
@@ -204,8 +256,9 @@ while play:
 		time.sleep(5)
 		quit()
 	while autoPopCounter < autoPop:
-		circleGroup.pop()
-		points += pointsValue
+		if(balloonsInList != 0):
+			circleGroup.pop()
+			points += pointsValue
 	#Test End
 	autoPopCounter = 0;
 	pygame.display.flip()
