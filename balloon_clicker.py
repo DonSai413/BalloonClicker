@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from pygame import mixer
 import random
 import sys
 from collections import defaultdict
@@ -26,16 +27,23 @@ class Square(pygame.sprite.Sprite):
 #Test End
 
 
-image = pygame.image.load("sky_image.jpg")
 
 #GAME INITIALIZATION
 pygame.init()
+mixer.init()
 pygame.font.init()
 pygame.display.set_caption("Balloon Clicker")
 width = 800
 height = 600
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
+
+imageName = ["sky_image.jpg"]
+image = pygame.image.load(imageName[0])
+
+musicName = ["pop.mp3"]
+mixer.music.load(musicName[0])
+mixer.music.set_volume(.3)
 
 class Circle(pygame.sprite.Sprite):
 	def __new__(cls, *args, **kwargs):
@@ -100,8 +108,9 @@ autoPopCounter = 0;
 points = 0
 pointsValue = 1
 
-clockSpeed = 10
+clockSpeed = 30
 autoPop = 0
+popSpeed = 0
 timerbase = 2
 
 timer2 = 2
@@ -282,6 +291,7 @@ while play:
 						for x in range(newint, len(circleGroup)):
 							circleGroup[x].index -= 1
 						del circleGroup[newint]
+						mixer.music.play()
 		mouseClickBacklog.remove(iterator)
 	if balloonsInList > 100:
 		#loseText = font2.render("YOU LOSE", True, (255, 0, 0))
@@ -299,14 +309,17 @@ while play:
 		pygame.display.flip()
 		time.sleep(5)
 		quit()
-	while autoPopCounter < autoPop:
-		autoPopCounter += 1
-		if(len(circleGroup) != 0):
-			print(balloonsInList)
-			print(len(circleGroup)-1)
-			del circleGroup[len(circleGroup)-1]
-			points += pointsValue
+		if (popSpeed % clockSpeed == 0):
+			popSpeed = 0
+			while autoPopCounter < autoPop:
+				autoPopCounter += 1
+				if(len(circleGroup) != 0):
+					print(balloonsInList)
+					print(len(circleGroup)-1)
+					del circleGroup[len(circleGroup)-1]
+					points += pointsValue
 	#Test End
 	autoPopCounter = 0;
 	timer2 += 1
+	popSpeed += 5
 	pygame.display.flip()
