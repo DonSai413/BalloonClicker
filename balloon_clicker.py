@@ -41,7 +41,7 @@ clock = pygame.time.Clock()
 imageName = ["sky_image.jpg"]
 image = pygame.image.load(imageName[0])
 
-musicName = ["pop.mp3"]
+musicName = ["pop.mp3", "victory.mp3"]
 mixer.music.load(musicName[0])
 mixer.music.set_volume(.3)
 
@@ -105,7 +105,7 @@ ychange = 10
 circleCounter = 0;
 autoPopCounter = 0;
 
-points = 100
+points = 998
 pointsValue = 1
 
 clockSpeed = 30
@@ -319,6 +319,9 @@ while play:
 		winBox.center = (400, 300)
 		screen.blit(winText, winBox)
 		pygame.display.flip()
+		mixer.music.load(musicName[1])
+		mixer.music.set_volume(.2)
+		mixer.music.play()
 		time.sleep(5)
 		quit()
 	#Test End
