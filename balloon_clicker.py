@@ -99,11 +99,13 @@ autoPopCounter = 0;
 points = 0
 pointsValue = 1
 
-clockSpeed = 1
+clockSpeed = 10
 autoPop = 0
+timerbase = 2
 
+timer2 = 2
 pointsCost = 10
-speedUpCost = 10*clockSpeed
+speedUpCost = 10*timerbase
 speedDownCost = speedUpCost/5
 balloonSpawnCost = 50
 autoPopCost = 100
@@ -113,6 +115,8 @@ play = True
 
 gray = (100, 100, 100)
 zeroZero = (0,0)
+
+mouseClickBacklog = list()
 
 def drawButton (posX, posY):
 	pygame.draw.rect(screen , gray, [posX, posY, 200, 50])
@@ -159,59 +163,19 @@ while play:
 			if event.key == K_BACKSPACE:
 				play = False
 		elif event.type == MOUSEBUTTONDOWN:
-			mousePos = (0,0)
-			mouse1 = True
 			mousePos = list(pygame.mouse.get_pos())
 			mousePos2 = [int(mousePos[0]), int(mousePos[1])]
+			mouseClickBacklog.append(mousePos2)
 			"""if mousePos >= (600, 100) and mousePos <=(800, 123):
 				print("It's the comparisons")
 			elif mousePos >= (600, 200):
 				print("It's not the comparisons")"""
-			print(mousePos2)
-			if mousePos2[0] >= 600 and mousePos2[0]  <= 800:
-				if mousePos2[1] >= 100 and mousePos2[1] <= 150:
-					if points >= pointsCost:
-						pointsValue += 1
-						points = points - pointsCost
-						pointsCost *= 1.25
-				elif  mousePos2[1] >= 175 and mousePos2[1] <= 225:
-					if points >= speedUpCost:
-						clockSpeed += 1
-						points = points - speedUpCost
-						speedUpCost = 10 * clockSpeed
-				elif mousePos2[1] >= 250 and mousePos2[1] <= 300:
-					if points >= speedDownCost and clockSpeed > 1:
-						clockSpeed -= 1
-						points = points - speedDownCost
-						speedUpCost = speedDownCost / 5
-				elif mousePos2[1] >= 325 and mousePos2[1] <= 375:
-					if points >= balloonSpawnCost:
-						balloonSpawn += 1
-						points = points - balloonSpawnCost
-						balloonSpawnCost *= 1.5
-				elif mousePos2[1] >= 400 and mousePos2[1] <= 450:
-					if points >= autoPopCost:
-						autoPop += 1
-						points = points - autoPopCost
-						autoPopCost *= 1.75
-			else:
-				for circle in circleGroup:
-					if mousePos2[0] >= (circle.balloonX - circle.radius) and mousePos2[0] <= (circle.balloonX + circle.radius):
-						if mousePos2[1] >= (circle.balloonY - circle.radius) and mousePos2[1] <= (circle.balloonY + circle.radius):
-							points += pointsValue
-							newint = circle.index
-							for x in range(newint, len(circleGroup)):
-								circleGroup[x].index -= 1
-							del circleGroup[newint]
-							break
 		elif event.type == MOUSEBUTTONUP:
 			mouse1 = False
 		elif event.type == QUIT:
 			play = False
-	#Test Start
-	screen.fill((0, 0, 0))
+	#Test Start	
 	#points += 1
-	screen.blit(image, dest = zeroZero)
 	#screen.blit(square1.surf,(balloonX,balloonY))
 	#if ticks > 10000:
 	#x = random.randrange(1, 800)
@@ -225,56 +189,99 @@ while play:
 	#screen.blit(square4.surf,(730,530))
 	text1 = font1.render(f"Points: {points}", True, (20, 10, 150))
 	#circleGroup.append(Circle())
-	for x in range(balloonSpawn):
-		circleGroup.append(Circle())
-		balloonsInList = len(circleGroup)
-		for circle in circleGroup:
-			circle.index = circleCounter
-			circle.drawCircle()
-			circleCounter += 1
+	#print(pygame.time.get_ticks())
+	if (timer2 % clockSpeed == 0):
+		timer2 = timerbase
+		screen.fill((0, 0, 0))
+		screen.blit(image, dest = zeroZero)
+		for x in range(balloonSpawn):
+			circleGroup.append(Circle())
+			balloonsInList = len(circleGroup)
+			for circle in circleGroup:
+				circle.index = circleCounter
+				circle.drawCircle()
+				circleCounter += 1
 
-		"""
-		#Note: Attempt to fix multi-circle deletion bug. Come back
-		#to later if time.
-		for circle in circleGroup:
-			print(circle.index)"""
-		"""balloonX = random.randrange(1, 799)
-		balloonY = random.randrange(1, 599)
-		red = random.randrange(100, 150)
-		green = random.randrange(100, 150)
-		blue = random.randrange(100, 150)
-		color = (red, green, blue)
-		center_point = (balloonX, balloonY)
-		pygame.draw.circle(screen, color, center_point, radius, thickness)"""
-	screen.blit(text1, pointsBox)
-	#BUTTONS
-	drawButton(600, 100)
-	morePoints = buttonFont.render(f"More Points per Balloon: {pointsCost}", True, (0, 0, 0))
-	screen.blit(morePoints,pointsPurchaseBox)
+			"""
+			#Note: Attempt to fix multi-circle deletion bug. Come back
+			#to later if time.
+			for circle in circleGroup:
+				print(circle.index)"""
+			"""balloonX = random.randrange(1, 799)
+			balloonY = random.randrange(1, 599)
+			red = random.randrange(100, 150)
+			green = random.randrange(100, 150)
+			blue = random.randrange(100, 150)
+			color = (red, green, blue)
+			center_point = (balloonX, balloonY)
+			pygame.draw.circle(screen, color, center_point, radius, thickness)"""
+		screen.blit(text1, pointsBox)
+		#BUTTONS
+		drawButton(600, 100)
+		morePoints = buttonFont.render(f"More Points per Balloon: {pointsCost}", True, (0, 0, 0))
+		screen.blit(morePoints,pointsPurchaseBox)
 
-	drawButton(600, 175)
-	speedUpText = buttonFont.render(f"Speed up: {speedUpCost}", True, (0, 0, 0))
-	screen.blit(speedUpText,speedUpBox)
+		drawButton(600, 175)
+		speedUpText = buttonFont.render(f"Speed up: {speedUpCost}", True, (0, 0, 0))
+		screen.blit(speedUpText,speedUpBox)
 
-	drawButton(600, 250)
-	speedDownText = buttonFont.render(f"Slow down: {speedDownCost}", True, (0, 0, 0))
-	screen.blit(speedDownText, speedDownBox)
+		drawButton(600, 250)
+		speedDownText = buttonFont.render(f"Slow down: {speedDownCost}", True, (0, 0, 0))
+		screen.blit(speedDownText, speedDownBox)
 
-	drawButton(600, 325)
-	balloonSpawnText1 = buttonFont.render(f"Spawn more balloons per ", True, (0, 0, 0))
-	balloonSpawnText2 = buttonFont.render(f"tick: {balloonSpawnCost}", True, (0, 0, 0))
-	screen.blit(balloonSpawnText1, balloonSpawnBox1)
-	screen.blit(balloonSpawnText2, balloonSpawnBox2)
+		drawButton(600, 325)
+		balloonSpawnText1 = buttonFont.render(f"Spawn more balloons per ", True, (0, 0, 0))
+		balloonSpawnText2 = buttonFont.render(f"tick: {balloonSpawnCost}", True, (0, 0, 0))
+		screen.blit(balloonSpawnText1, balloonSpawnBox1)
+		screen.blit(balloonSpawnText2, balloonSpawnBox2)
 
-	drawButton(600, 400)
-	autoPopText1 = buttonFont.render(f"Auto-pops balloons if there", True, (0, 0, 0))
-	autoPopText2 = buttonFont.render(f"are any: {autoPopCost}", True, (0, 0, 0))
-	screen.blit(autoPopText1, autoPopBox1)
-	screen.blit(autoPopText2, autoPopBox2)
+		drawButton(600, 400)
+		autoPopText1 = buttonFont.render(f"Auto-pops balloons if there", True, (0, 0, 0))
+		autoPopText2 = buttonFont.render(f"are any: {autoPopCost}", True, (0, 0, 0))
+		screen.blit(autoPopText1, autoPopBox1)
+		screen.blit(autoPopText2, autoPopBox2)
 
-	#screen.blit(loseText, loseBox)
-	#END OF BUTTONS
-	circleCounter = 0
+		#screen.blit(loseText, loseBox)
+		#END OF BUTTONS
+		circleCounter = 0
+	for iterator in mouseClickBacklog:
+		#print(mouseClickBacklog)
+		if iterator[0] >= 600 and iterator[0]  <= 800:
+			if iterator[1] >= 100 and iterator[1] <= 150:
+				if points >= pointsCost:
+					pointsValue += 1
+					points = points - pointsCost
+					pointsCost *= 1.25
+			elif  iterator[1] >= 175 and iterator[1] <= 225:
+				if points >= speedUpCost:
+					timerbase += 1
+					points = points - speedUpCost
+					speedUpCost = 10 * timerbase
+			elif iterator[1] >= 250 and iterator[1] <= 300:
+				if points >= speedDownCost and timerbase > 1:
+					timerbase -= 1
+					points = points - speedDownCost
+					speedDownCost = speedUpCost / 5
+			elif x[1] >= 325 and x[1] <= 375:
+				if points >= balloonSpawnCost:
+					balloonSpawn += 1
+					points = points - balloonSpawnCost
+					balloonSpawnCost *= 1.5
+			elif x[1] >= 400 and x[1] <= 450:
+				if points >= autoPopCost:
+					autoPop += 1
+					points = points - autoPopCost
+					autoPopCost *= 1.75
+		else:
+			for circle in circleGroup:
+				if iterator[0] >= (circle.balloonX - circle.radius) and iterator[0] <= (circle.balloonX + circle.radius):
+					if iterator[1] >= (circle.balloonY - circle.radius) and iterator[1] <= (circle.balloonY + circle.radius):
+						points += pointsValue
+						newint = circle.index
+						for x in range(newint, len(circleGroup)):
+							circleGroup[x].index -= 1
+						del circleGroup[newint]
+		mouseClickBacklog.remove(iterator)
 	if balloonsInList > 100:
 		#loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 		loseBox = loseText.get_rect()
@@ -297,4 +304,5 @@ while play:
 			points += pointsValue
 	#Test End
 	autoPopCounter = 0;
+	timer2 += 1
 	pygame.display.flip()
