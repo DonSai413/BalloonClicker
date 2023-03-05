@@ -41,9 +41,14 @@ clock = pygame.time.Clock()
 imageName = ["sky_image.jpg"]
 image = pygame.image.load(imageName[0])
 
-musicName = ["pop.mp3", "victory.mp3", "lose.mp3"]
+musicName = ["pop.mp3", "victory.mp3", "lose.mp3", "wrong.mp3"]
 mixer.music.load(musicName[0])
 mixer.music.set_volume(.3)
+
+def wrong():
+	mixer.music.load(musicName[3])
+	mixer.music.set_volume(.1)
+	mixer.music.play()
 
 class Circle(pygame.sprite.Sprite):
 	def __new__(cls, *args, **kwargs):
@@ -263,6 +268,7 @@ while play:
 				#print(len(circleGroup)-1)
 				del circleGroup[len(circleGroup)-1]
 				mixer.music.load(musicName[0])
+				mixer.music.set_volume(.3)
 				mixer.music.play()
 				points += pointsValue
 	for iterator in mouseClickBacklog:
@@ -273,26 +279,36 @@ while play:
 					pointsValue += 1
 					points = points - pointsCost
 					pointsCost *= 1.25
+				else:
+					wrong()
 			elif  iterator[1] >= 175 and iterator[1] <= 225:
 				if points >= speedUpCost and timerbase < clockSpeed:
 					timerbase += 1
 					points = points - speedUpCost
 					speedUpCost = 10 * timerbase
+				else:
+					wrong()
 			elif iterator[1] >= 250 and iterator[1] <= 300:
 				if points >= speedDownCost and timerbase > 1:
 					timerbase -= 1
 					points = points - speedDownCost
 					speedDownCost = speedUpCost / 5
+				else:
+					wrong()
 			elif iterator[1] >= 325 and iterator[1] <= 375:
 				if points >= balloonSpawnCost:
 					balloonSpawn += 1
 					points = points - balloonSpawnCost
 					balloonSpawnCost *= 1.5
+				else:
+					wrong()
 			elif iterator[1] >= 400 and iterator[1] <= 450:
 				if points >= autoPopCost:
 					autoPop += 1
 					points = points - autoPopCost
 					autoPopCost *= 1.75
+				else:
+					wrong()
 		else:
 			for circle in circleGroup:
 				if iterator[0] >= (circle.balloonX - circle.radius) and iterator[0] <= (circle.balloonX + circle.radius):
@@ -303,6 +319,7 @@ while play:
 							circleGroup[x].index -= 1
 						del circleGroup[newint]
 						mixer.music.load(musicName[0])
+						mixer.music.set_volume(.3)
 						mixer.music.play()
 		mouseClickBacklog.remove(iterator)
 	if len(circleGroup) > 100:
