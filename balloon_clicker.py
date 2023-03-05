@@ -103,6 +103,7 @@ font1 = pygame.font.SysFont('freesanbold.ttf', 50)
 font2 = pygame.font.SysFont('freesanbold.ttf', 100)
 titleFont = pygame.font.SysFont('freesanbold.ttf', 100)
 buttonFont = pygame.font.SysFont('freesanbold.ttf', 20)
+infoFont = pygame.font.SysFont('freesanbold.ttf', 35)
 mouse1 = False
 
 xchange = 10
@@ -151,6 +152,7 @@ loseText = font2.render("YOU LOSE", True, (255, 0, 0))
 titleText = titleFont.render("BALLOON CLICKER", True, (255, 255, 255))
 playText = font1.render("PLAY", True, (255, 255, 255))
 quitText = font1.render("QUIT", True, (255, 255, 255))
+infoText = infoFont.render("Get over 1000 points to win. Lose if there are over 100 balloons", True, (255, 255, 255))
 
 pointsBox = text1.get_rect()
 pointsPurchaseBox = morePoints.get_rect()
@@ -163,7 +165,7 @@ autoPopBox2 = autoPopText2.get_rect()
 titleBox = titleText.get_rect()
 playBox = playText.get_rect()
 quitBox = quitText.get_rect()
-
+infoBox = infoText.get_rect()
 
 pointsBox.center = (700, 50)
 pointsPurchaseBox.center = (700, 125)
@@ -174,8 +176,9 @@ balloonSpawnBox2.center = (700, 360)
 autoPopBox1.center = (700, 425)
 autoPopBox2.center = (700, 435)
 titleBox.center = (400, 200)
-playBox = (375, 400)
-quitBox = (375, 500)
+playBox.center = (375, 400)
+quitBox.center = (375, 500)
+infoBox.center = (400, 300)
 
 #MENU LOOP
 while menu:
@@ -206,6 +209,11 @@ while menu:
 	pygame.display.flip()
 #GAME LOOP
 #circleGroup.append(Circle())
+screen.fill((0, 0, 0))
+screen.blit(infoText, infoBox)
+pygame.display.flip()
+time.sleep(5)
+pygame.display.flip()
 while play:
 	clock.tick(clockSpeed)
 	#ticks = pygame.time.get_ticks()
